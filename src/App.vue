@@ -14,5 +14,13 @@ export default {
 </template>
 
 <style>
+html, body, #app {
+    height: 100%;
+    margin: 0;
+}
 
+#app {
+    display: flex;
+    align-items: center;
+}
 </style>
