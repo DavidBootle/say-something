@@ -18,5 +18,6 @@ export default {
 section#home-container {
     display: flex;
     align-items: center;
+    height: 100vh;
 }
 </style>
