@@ -1,14 +1,30 @@
 <script>
 
+export default {
+    data() {
+        return {
+            adjective: '',
+            topic: ''
+        }
+    },
+    methods: {
+        createNew() {
+            alert(`Generated new page: Say Something ${this.adjective} About ${this.topic}`)
+            this.adjective = ""
+            this.topic = ""
+        }
+    }
+}
+
 </script>
 
 <template>
     <div class="input-box">
         <h1>Say Something</h1>
-        <input type="text"/>
+        <input type="text" v-model="adjective"/>
         <h2>About</h2>
-        <input type="text"/>
-        <button>Create</button>
+        <input type="text" v-model="topic"/>
+        <button @click="createNew">Create</button>
     </div>
 </template>
 
