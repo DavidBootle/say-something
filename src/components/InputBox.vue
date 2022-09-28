@@ -8,6 +8,7 @@
         <input type="text"/>
         <h2>About</h2>
         <input type="text"/>
+        <button>Create</button>
     </div>
 </template>
 
@@ -52,6 +53,27 @@
 
 .input-box input:hover, .input-box input:focus {
     box-shadow: #AAA 4px 4px;
+}
+
+.input-box button {
+    margin: 2rem 0 -0.5rem 0;
+    background-color: lightblue;
+    padding: 0.4rem 1rem;
+    outline: transparent solid 2px;
+    border: none;
+    border-radius: 0.2rem;
+    font-size: 15px;
+    font-weight: bold;
+
+    transition: outline 0.1s linear;
+}
+
+.input-box button:hover, .input-box button:focus-visible {
+    outline: #AAA solid 0.2rem;
+}
+
+.input-box button:active {
+    outline: #999 solid 0.3rem; 
 }
 
 </style>
