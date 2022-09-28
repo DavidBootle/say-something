@@ -20,9 +20,9 @@ export default {
             })
             let body = await response.json()
             if (body.success) {
-                alert("New post created!")
+                alert(`New poll created with id ${body.pollId}`)
             } else {
-                alert("Post failed to create")
+                alert("Poll failed to create.")
             }
         }
     }
