@@ -4,14 +4,26 @@ export default {
     data() {
         return {
             adjective: '',
-            topic: ''
+            topic: '',
+            backendURL: import.meta.env.VITE_BACKEND_URL
         }
     },
     methods: {
-        createNew() {
-            alert(`Generated new page: Say Something ${this.adjective} About ${this.topic}`)
-            this.adjective = ""
-            this.topic = ""
+        async createPoll() {
+            let response = await fetch(this.backendURL + '/new-poll', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    adjective: this.adjective,
+                    topic: this.topic
+                })
+            })
+            let body = await response.json()
+            if (body.success) {
+                alert("New post created!")
+            } else {
+                alert("Post failed to create")
+            }
         }
     }
 }
@@ -24,7 +36,7 @@ export default {
         <input type="text" v-model="adjective"/>
         <h2>About</h2>
         <input type="text" v-model="topic"/>
-        <button @click="createNew">Create</button>
+        <button @click="createPoll">Create Poll</button>
     </div>
 </template>
 
