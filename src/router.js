@@ -8,6 +8,6 @@ export const router = createRouter({
   routes: [
     { path: "/", component: Home },
     { path: "/poll/:id", component: Poll },
-    { path: '/:pageParams(.*)*', component: Error404 },
+    { path: '/:pageParams(.*)*', name: 'NotFound', component: Error404 },
   ]
 });

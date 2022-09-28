@@ -53,6 +53,33 @@ app.post('/new-poll', async (req, res) => {
     }
 })
 
+app.post('/fetch-poll', async (req, res) => {
+    let { pollId } = req.body;
+
+    try {
+        let snapshot = await fbDatabase.get(fbDatabase.child(fbDatabase.ref(db), `polls/${pollId}`))
+        if (snapshot.exists()) {
+            let data = snapshot.val()
+            res.json({
+                "success": true,
+                "poll": {
+                    "adjective": data.adjective,
+                    "topic": data.topic,
+                }
+            })
+        } else {
+            res.json({
+                "success": false,
+                "exists": false
+            })
+        }
+    } catch {
+        res.status(500).json({
+            "success": false
+        })
+    }
+})
+
 app.listen(port, () => {
     console.log(`App listening on ${port}`)
 })
