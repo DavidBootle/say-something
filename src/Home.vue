@@ -9,11 +9,13 @@ export default {
 </script>
 
 <template>
-    <input-box/>
+    <section id="home-container">
+        <input-box/>
+    </section>
 </template>
 
 <style>
-#app {
+section#home-container {
     display: flex;
     align-items: center;
 }
