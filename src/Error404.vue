@@ -50,7 +50,27 @@ export default {
                 "The page was struck by a meteor.",
                 "Oh no.",
                 "Uh oh.",
-                "It's probably David's fault."
+                "It's probably David's fault.",
+                "The page was executed by the Bolivian Mafia.",
+                "The page was taken to Brazil.",
+                'The page died in an "explosion".',
+                "The page hath perished.",
+                "Try harder.",
+                "The page was ejected for being sus.",
+                "The page experienced the heat death of the universe.",
+                "You can get a new error message by clicking me.",
+                "These messages are randomly generated!",
+                "Our servers are literally on fire.",
+                "The page is probably secretely still here.",
+                "If a page disappears and no one sees it, did it really disappear?",
+                "It's entirely possible the page never even existed.",
+                "The page left to pursue poetry.",
+                "The page has turned to a life of crime.",
+                "The page exploded in a brilliant ball of nuclear fire.",
+                "The page donated its life savings to charity.",
+                "The hamster tried his best to find your page.",
+                "David did it.",
+                "The page migrated to france to eat baguettes."
             ]
             let randomIndex = Math.floor(Math.random() * messages.length)
             this.errorMessage = messages[randomIndex]
