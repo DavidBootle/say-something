@@ -48,7 +48,7 @@ export default {
     </div>
 </template>
 
-<style>
+<style scoped>
 
 .input-box {
     background-color: #EEE;
