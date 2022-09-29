@@ -1,6 +1,11 @@
 <script>
 
+import SaySomethingBox from './components/SaySomethingBox.vue'
+
 export default {
+    components: {
+        'say-something-box': SaySomethingBox
+    },
     data() {
         return {
             backendURL: import.meta.env.VITE_BACKEND_URL,
@@ -54,10 +59,7 @@ export default {
 
 <section id="page-container">
     <div v-if="loaded">
-        <div class="topic-box-container">
-            <h1 class="page-title">Say Something <strong>{{ poll.adjective }}</strong> About <strong>{{ poll.topic }}</strong></h1>
-            <textarea id="opinion-input"></textarea>
-        </div>
+        <say-something-box :adjective="poll.adjective" :topic="poll.topic"/>
     </div>
 </section>
 
@@ -65,40 +67,17 @@ export default {
 
 <style scoped>
 
-.page-title {
-    text-align: center;
-    font-family: sans-serif;
-    font-size: 3rem;
-    margin: 0;
-}
-
-.topic-box-container {
-    margin: 2rem auto;
-    background-color: #EEE;
-    padding: 2rem;
-    border-radius: 1rem;
-    max-width: 60rem;
-}
-
-.topic-box-container textarea {
-    margin: 1.5rem 0 0 0;
-    border-radius: 0.5rem;
-    min-height: 6rem;
-    resize: none;
-    font-size: 1rem;
-    width: 100%;
-    font-family: sans-serif;
-    padding: 1rem;
+#page-container {
     box-sizing: border-box;
-    text-align: center;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    
 }
 
 @media screen and (max-width: 1050px) {
-    .topic-box-container {
-        margin: 0.5rem;
-    }
-    .topic-box-container textarea {
-        padding: 0.5rem 0.2rem;
+    #page-container {
+        padding: 0.5rem;
     }
 }
 
