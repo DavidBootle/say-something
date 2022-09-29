@@ -41,9 +41,9 @@ export default {
 <template>
     <div class="input-box">
         <h1>Say Something</h1>
-        <input type="text" v-model="adjective"/>
+        <input type="text" v-model="adjective" placeholder="Cool"/>
         <h2>About</h2>
-        <input type="text" v-model="topic"/>
+        <input type="text" v-model="topic" placeholder="Ice Cream"/>
         <button @click="createPoll" :disabled="buttonDisabled">Create Poll</button>
     </div>
 </template>
