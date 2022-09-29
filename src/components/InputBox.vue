@@ -20,7 +20,7 @@ export default {
             })
             let body = await response.json()
             if (body.success) {
-                alert(`New poll created with id ${body.pollId}`)
+                this.$router.push(`/poll/${body.pollId}`)
             } else {
                 alert("Poll failed to create.")
             }
