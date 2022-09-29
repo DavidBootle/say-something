@@ -5,24 +5,32 @@ export default {
         return {
             adjective: '',
             topic: '',
-            backendURL: import.meta.env.VITE_BACKEND_URL
+            backendURL: import.meta.env.VITE_BACKEND_URL,
+            buttonDisabled: false,
         }
     },
     methods: {
         async createPoll() {
-            let response = await fetch(this.backendURL + '/new-poll', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    adjective: this.adjective,
-                    topic: this.topic
+            this.buttonDisabled = true;
+            try {
+                let response = await fetch(this.backendURL + '/new-poll', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        adjective: this.adjective,
+                        topic: this.topic
+                    })
                 })
-            })
-            let body = await response.json()
-            if (body.success) {
-                this.$router.push(`/poll/${body.pollId}`)
-            } else {
-                alert("Poll failed to create.")
+                let body = await response.json()
+                if (body.success) {
+                    this.$router.push(`/poll/${body.pollId}`)
+                } else {
+                    alert("Poll failed to create.")
+                }
+            } catch {
+                alert("Something went wrong.")
+            } finally {
+                this.buttonDisabled=false;
             }
         }
     }
@@ -36,7 +44,7 @@ export default {
         <input type="text" v-model="adjective"/>
         <h2>About</h2>
         <input type="text" v-model="topic"/>
-        <button @click="createPoll">Create Poll</button>
+        <button @click="createPoll" :disabled="buttonDisabled">Create Poll</button>
     </div>
 </template>
 
