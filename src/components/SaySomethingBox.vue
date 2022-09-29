@@ -3,7 +3,45 @@
 export default {
     props: {
         adjective: String,
-        topic: String
+        topic: String,
+        pollId: String
+    },
+    data() {
+        return {
+            opinionText: '',
+            buttonDisabled: false,
+            backendURL: import.meta.env.VITE_BACKEND_URL
+        }
+    },
+    methods: {
+        async createOpinion() {
+            this.buttonDisabled = true;
+            try {
+                let response = await fetch(this.backendURL + '/new-opinion', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text: this.opinionText,
+                        pollId: this.pollId
+                    })
+                })
+                if (!response.ok) {
+                    alert("Something went wrong.");
+                    return;
+                }
+                let data = await response.json();
+                if (data.success) {
+                    alert("Opinion created!");
+                    this.opinionText = '';
+                } else {
+                    alert("Something went wrong.");
+                }
+            } catch {
+                alert("Something went wrong.")
+            } finally {
+                this.buttonDisabled = false;
+            }
+        }
     }
 }
 
@@ -12,8 +50,8 @@ export default {
 <template>
     <div class="topic-box-container">
         <h1 class="page-title">Say Something <strong>{{ adjective }}</strong> About <strong>{{ topic }}</strong></h1>
-        <textarea id="opinion-input"></textarea>
-        <button id="say-it-button">Say It!</button>
+        <textarea id="opinion-input" v-model="opinionText"></textarea>
+        <button id="say-it-button" @click="createOpinion" :disabled="buttonDisabled">Say It!</button>
     </div>
 </template>
 

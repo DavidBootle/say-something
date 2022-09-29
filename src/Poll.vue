@@ -59,7 +59,7 @@ export default {
 
 <section id="page-container">
     <div v-if="loaded">
-        <say-something-box :adjective="poll.adjective" :topic="poll.topic"/>
+        <say-something-box :adjective="poll.adjective" :topic="poll.topic" :pollId="pollId"/>
     </div>
 </section>
 

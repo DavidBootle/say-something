@@ -80,6 +80,28 @@ app.post('/fetch-poll', async (req, res) => {
     }
 })
 
+app.post('/new-opinion', async (req, res) => {
+    let { text, pollId } = req.body;
+
+    try {
+        let opinionList = fbDatabase.ref(db, 'opinions/' + pollId)
+        let newOpinion = fbDatabase.push(opinionList)
+        await fbDatabase.set(newOpinion, {
+            text,
+            created: Date.now()
+        })
+
+        res.json({
+            "success": true
+        })
+    }
+    catch {
+        res.status(500).json({
+            "success": false
+        })
+    }
+})
+
 app.listen(port, () => {
     console.log(`App listening on ${port}`)
 })
