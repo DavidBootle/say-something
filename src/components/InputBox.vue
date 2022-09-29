@@ -53,7 +53,6 @@ export default {
     flex-direction: column;
     
     width: 18rem;
-    margin: 0 auto;
 
     font-family: sans-serif;
 }
