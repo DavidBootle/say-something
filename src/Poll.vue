@@ -159,6 +159,10 @@ export default {
 
 <style scoped>
 
+.topic-box-container {
+    margin: 0 auto;
+}
+
 .make-your-own-container {
     background-color: #EEE;
     padding: 1rem;
