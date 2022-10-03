@@ -17,10 +17,15 @@ const db = fbDatabase.getDatabase(firebaseApp)
 
 const express = require('express')
 const cors = require('cors')
+const http = require('http')
 
 const app = express()
+const server = http.createServer(app)
 app.use(express.json());
 app.use(cors());
+
+const socket = require('socket.io')
+const io = new socket.Server(server)
 
 const port = 5200
 const fs = require('fs/promises')
@@ -83,13 +88,15 @@ app.post('/fetch-poll', async (req, res) => {
 app.post('/new-opinion', async (req, res) => {
     let { text, pollId } = req.body;
 
+    let opinion = {
+        text,
+        created: Date.now()
+    }
+
     try {
         let opinionList = fbDatabase.ref(db, 'opinions/' + pollId)
         let newOpinion = fbDatabase.push(opinionList)
-        await fbDatabase.set(newOpinion, {
-            text,
-            created: Date.now()
-        })
+        await fbDatabase.set(newOpinion, opinion)
 
         res.json({
             "success": true
@@ -100,6 +107,9 @@ app.post('/new-opinion', async (req, res) => {
             "success": false
         })
     }
+
+    // attempt to send socket update to connected clients
+    io.to(pollId).emit('new-opinion', opinion)
 })
 
 app.post('/fetch-opinions', async (req, res) => {
@@ -126,6 +136,13 @@ app.post('/fetch-opinions', async (req, res) => {
     }
 })
 
-app.listen(port, () => {
+io.on('connection', (socket) => {
+    socket.on('poll-connection', (pollId) => {
+        socket.join(pollId);
+        console.log('Socket just joined room ' + pollId);
+    })
+})
+
+server.listen(port, () => {
     console.log(`App listening on ${port}`)
 })

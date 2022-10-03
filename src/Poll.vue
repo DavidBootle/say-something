@@ -3,6 +3,7 @@
 import SaySomethingBox from './components/SaySomethingBox.vue'
 import LoadingIcon from './components/LoadingIcon.vue'
 import Error from './components/Error.vue'
+import { io } from 'socket.io-client'
 
 export default {
     components: {
@@ -18,7 +19,8 @@ export default {
             loaded: false,
             error: false,
             errorMessage: 'The page failed to load.',
-            opinions: []
+            opinions: [],
+            socket: io(import.meta.env.VITE_BACKEND_URL)
         }
     },
     methods: {
@@ -96,6 +98,14 @@ export default {
     },
     mounted() {
         this.fetchPollData()
+
+        // join socket room
+        this.socket.emit('poll-connection', this.pollId)
+
+        this.socket.on('new-opinion', (opinion) => {
+            this.opinions.push(opinion.text.replace(/[\n\r]/g, '<br/>'))
+        })
+
     }
 }
 
