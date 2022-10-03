@@ -22,7 +22,8 @@ export default {
             errorMessage: 'The page failed to load.',
             opinions: [],
             socket: io(import.meta.env.VITE_SOCKET_URL, {
-                path: import.meta.env.VITE_SOCKET_PATH
+                path: import.meta.env.VITE_SOCKET_PATH,
+                transports: ["websocket", "polling"]
             })
         }
     },
@@ -120,8 +121,10 @@ export default {
             this.opinions.push(opinion.text.replace(/[\n\r]/g, '<br/>'))
         })
 
+        // if socket fails to connect
         this.socket.on("connect_error", (err) => {
             console.log(`connect_error due to ${err.message}`);
+            socket.io.opts.transports = ["polling", "websocket"];
         });
 
     }

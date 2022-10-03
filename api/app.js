@@ -31,7 +31,9 @@ const randomstring = require('randomstring')
 
 // initialize socket io
 const socket = require('socket.io')
-const io = new socket.Server(server)
+const io = new socket.Server(server, {
+    transports: ["websocket", "polling"]
+})
 
 // print information about connection errors
 io.engine.on("connection_error", (err) => {
