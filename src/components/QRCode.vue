@@ -10,7 +10,7 @@ export default {
     mounted() {
         QrCreator.render({
             text: this.text,
-            radius: 0,
+            radius: 0.5,
             ecLevel: 'M',
             fill: '#000000',
             background: null,

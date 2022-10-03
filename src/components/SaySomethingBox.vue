@@ -1,6 +1,11 @@
 <script>
 
+import QRCode from './QRCode.vue'
+
 export default {
+    components: {
+        'qrcode': QRCode
+    },
     props: {
         adjective: String,
         topic: String,
@@ -10,7 +15,9 @@ export default {
         return {
             opinionText: '',
             buttonDisabled: false,
-            backendURL: import.meta.env.VITE_BACKEND_URL
+            backendURL: import.meta.env.VITE_BACKEND_URL,
+            showQRCode: false,
+            currentURL: window.location.href
         }
     },
     methods: {
@@ -48,6 +55,9 @@ export default {
                 // reenable submit button after code has been run
                 this.buttonDisabled = false;
             }
+        },
+        toggleQRCode() {
+            this.showQRCode = this.showQRCode ? false : true
         }
     }
 }
@@ -59,10 +69,36 @@ export default {
         <h1 class="page-title">Say Something <strong>{{ adjective }}</strong> About <strong>{{ topic }}</strong></h1>
         <textarea id="opinion-input" v-model="opinionText"></textarea>
         <button id="say-it-button" @click="createOpinion" :disabled="buttonDisabled">Say It!</button>
+        <span id="openQRModal" @click="toggleQRCode" title="Toggle QR Code">
+            <svg height="24" width="24"><path d="M13 21v-2h2v2Zm-2-2v-5h2v5Zm8-3v-4h2v4Zm-2-4v-2h2v2ZM5 14v-2h2v2Zm-2-2v-2h2v2Zm9-7V3h2v2ZM4.5 7.5h3v-3h-3ZM3 9V3h6v6Zm1.5 10.5h3v-3h-3ZM3 21v-6h6v6ZM16.5 7.5h3v-3h-3ZM15 9V3h6v6Zm2 12v-3h-2v-2h4v3h2v2Zm-4-7v-2h4v2Zm-4 0v-2H7v-2h6v2h-2v2Zm1-5V5h2v2h2v2ZM5.25 6.75v-1.5h1.5v1.5Zm0 12v-1.5h1.5v1.5Zm12-12v-1.5h1.5v1.5Z"/></svg>
+        </span>
+        <div v-if="showQRCode" class="qr-container">
+            <qrcode :text="currentURL" :size="240"/>
+        </div>
     </div>
 </template>
 
 <style>
+
+span#openQRModal {
+    margin-left: 1rem;
+    display: inline;
+    vertical-align: middle;
+    height: 29px;
+    width: 29px;
+    display: inline-block;
+}
+
+span#openQRModal svg {
+    scale: 1.2;
+    transition: scale 50ms linear;
+    fill: darkgray;
+}
+
+span#openQRModal:hover svg {
+    scale: 1.5;
+    fill: black;
+}
 
 .page-title {
     text-align: center;
@@ -95,7 +131,7 @@ export default {
     text-align: center;
 }
 
-button {
+button#say-it-button {
     margin: 1.5rem 0 -0.5rem 0;
     background-color: lightblue;
     padding: 0.4rem 1rem;
@@ -114,6 +150,10 @@ button:hover, button:focus-visible {
 
 button:active {
     box-shadow: 0 0 0 0.3rem #999;
+}
+
+.qr-container {
+    margin-top: 2rem;
 }
 
 @media screen and (max-width: 1050px) {
