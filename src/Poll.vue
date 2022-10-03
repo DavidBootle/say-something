@@ -6,6 +6,13 @@ import LoadingIcon from './components/LoadingIcon.vue'
 import Error from './components/Error.vue'
 import { io } from 'socket.io-client'
 
+let socketOptions;
+if (import.meta.env.VITE_BACKEND_URL.includes('/api')) {
+    socketOptions = { path: '/api/socket.io/' }
+} else {
+    socketOptions = null
+}
+
 export default {
     components: {
         'say-something-box': SaySomethingBox,
@@ -21,7 +28,7 @@ export default {
             error: false,
             errorMessage: 'The page failed to load.',
             opinions: [],
-            socket: io(import.meta.env.VITE_BACKEND_URL)
+            socket: io(import.meta.env.VITE_BACKEND_URL, socketOptions)
         }
     },
     methods: {
