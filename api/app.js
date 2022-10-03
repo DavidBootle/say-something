@@ -33,6 +33,11 @@ const randomstring = require('randomstring')
 const socket = require('socket.io')
 const io = new socket.Server(server)
 
+// print information about connection errors
+io.engine.on("connection_error", (err) => {
+    console.log(err);
+});
+
 // utility functions
 async function pollIdIsTaken(pollId) {
     // returns true if the poll id already exists, false if not
