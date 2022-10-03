@@ -98,8 +98,9 @@ export default {
     <div v-if="loaded">
         <say-something-box :adjective="poll.adjective" :topic="poll.topic" :pollId="pollId" @submit="fetchPollData"/>
         <div v-if="opinions">
-            <div v-for="opinion in opinions">
-                <p v-html="opinion"></p>
+            <h3>Here's what others said:</h3>
+            <div v-for="opinion in opinions" class="opinions-container">
+                <p class="opinion-container" v-html="opinion"></p>
             </div>
         </div>
     </div>
@@ -115,6 +116,20 @@ export default {
     display: flex;
     justify-content: center;
     
+}
+
+h3 {
+    font-family: sans-serif;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+p.opinion-container {
+    font-family: sans-serif;
+    text-align: center;
+    background-color: #EEE;
+    padding: 1rem;
+    border-radius: 1rem;
 }
 
 @media screen and (max-width: 1050px) {
