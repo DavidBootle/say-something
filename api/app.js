@@ -139,7 +139,6 @@ app.post('/fetch-opinions', async (req, res) => {
 io.on('connection', (socket) => {
     socket.on('poll-connection', (pollId) => {
         socket.join(pollId);
-        console.log('Socket just joined room ' + pollId);
     })
 })
 
