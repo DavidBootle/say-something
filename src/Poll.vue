@@ -1,10 +1,14 @@
 <script>
 
 import SaySomethingBox from './components/SaySomethingBox.vue'
+import LoadingIcon from './components/LoadingIcon.vue'
+import Error from './components/Error.vue'
 
 export default {
     components: {
-        'say-something-box': SaySomethingBox
+        'say-something-box': SaySomethingBox,
+        'loading-icon': LoadingIcon,
+        'error': Error,
     },
     data() {
         return {
@@ -13,76 +17,81 @@ export default {
             poll: null,
             loaded: false,
             error: false,
+            errorMessage: 'The page failed to load.',
             opinions: []
         }
     },
     methods: {
         async fetchPollData() {
             // fetch poll info
-            let response = await fetch(this.backendURL + '/fetch-poll', {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    pollId: this.pollId
+            try {
+                let response = await fetch(this.backendURL + '/fetch-poll', {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        pollId: this.pollId
+                    })
                 })
-            })
-            if (!response.ok) {
-                this.loaded = true
-                this.error = true
-                return
-            }
-            let data = await response.json()
-            if (data.success) {
-                this.poll = data.poll
-            } else if (!data.exists) {
-                // push error 404 page
-                this.$router.push({
-                    name: "NotFound",
-                    params: { pageParams: this.$route.path.substring(1).split('/') },
-                    query: this.$route.query,
-                    hash: this.$route.hash
-                })
-            } else {
-                this.loaded = true
-                this.error = true
-                return
-            }
-
-            response = await fetch(this.backendURL + '/fetch-opinions', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    pollId: this.pollId
-                })
-            })
-
-            if (!response.ok) {
-                this.loaded = true
-                this.error = true
-                return
-            }
-
-            data = await response.json()
-            if (data.success) {
-                // turn \n into <br/>
-                let opinions = []
-                if (data.opinions) {
-                    for (let opinion of Object.values(data.opinions)) {
-                        console.log(opinion)
-                        opinions.push(opinion.text.replace(/[\n\r]/g, '<br/>'))
-                    }
-                    this.opinions = opinions
+                if (!response.ok) {
+                    this.loaded = true
+                    this.error = true
+                    return
                 }
-                this.loaded = true
-                this.error = false
-            } else if (!data.exists) {
-                this.opinions = []
-            } else {
-                this.loaded = true
-                this.error = true
-                return
-            }
+                let data = await response.json()
+                if (data.success) {
+                    this.poll = data.poll
+                } else if (!data.exists) {
+                    // push error 404 page
+                    this.$router.push({
+                        name: "NotFound",
+                        params: { pageParams: this.$route.path.substring(1).split('/') },
+                        query: this.$route.query,
+                        hash: this.$route.hash
+                    })
+                } else {
+                    this.loaded = true
+                    this.error = true
+                    return
+                }
 
+                response = await fetch(this.backendURL + '/fetch-opinions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        pollId: this.pollId
+                    })
+                })
+
+                if (!response.ok) {
+                    this.loaded = true
+                    this.error = true
+                    return
+                }
+
+                data = await response.json()
+                if (data.success) {
+                    // turn \n into <br/>
+                    let opinions = []
+                    if (data.opinions) {
+                        for (let opinion of Object.values(data.opinions)) {
+                            console.log(opinion)
+                            opinions.push(opinion.text.replace(/[\n\r]/g, '<br/>'))
+                        }
+                        this.opinions = opinions
+                    }
+                    this.loaded = true
+                    this.error = false
+                } else if (!data.exists) {
+                    this.opinions = []
+                } else {
+                    this.loaded = true
+                    this.error = true
+                    return
+                }
+            } catch {
+                this.loaded = true;
+                this.error = true;
+            }
         }
     },
     mounted() {
@@ -95,14 +104,20 @@ export default {
 <template>
 
 <section id="page-container">
-    <div v-if="loaded">
+    <div v-if="loaded && !error">
         <say-something-box :adjective="poll.adjective" :topic="poll.topic" :pollId="pollId" @submit="fetchPollData"/>
-        <div v-if="opinions">
+        <div v-if="opinions && opinions.length > 0">
             <h3>Here's what others said:</h3>
             <div v-for="opinion in opinions" class="opinions-container">
                 <p class="opinion-container" v-html="opinion"></p>
             </div>
         </div>
+    </div>
+    <div v-else-if="error">
+        <error :message="errorMessage"/>
+    </div>
+    <div v-else>
+        <loading-icon/>
     </div>
 </section>
 
