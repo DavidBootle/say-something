@@ -15,8 +15,10 @@ export default {
     },
     methods: {
         async createOpinion() {
+            // disable submit button
             this.buttonDisabled = true;
             try {
+                // send request to create new opinion to the database
                 let response = await fetch(this.backendURL + '/new-opinion', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -26,19 +28,24 @@ export default {
                     })
                 })
                 if (!response.ok) {
+                    // if something went wrong with the request
                     alert("Something went wrong.");
                     return;
                 }
                 let data = await response.json();
                 if (data.success) {
+                    // if the opinion was created properly, send emission to let parent know
                     this.opinionText = '';
                     this.$emit('submit');
                 } else {
+                    // if the request was recieved but there was a server error
                     alert("Something went wrong.");
                 }
             } catch {
+                // if there was an error with fetch
                 alert("Something went wrong.")
             } finally {
+                // reenable submit button after code has been run
                 this.buttonDisabled = false;
             }
         }
