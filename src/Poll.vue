@@ -76,7 +76,6 @@ export default {
                     let opinions = []
                     if (data.opinions) {
                         for (let opinion of Object.values(data.opinions)) {
-                            console.log(opinion)
                             opinions.push(opinion.text.replace(/[\n\r]/g, '<br/>'))
                         }
                         this.opinions = opinions
