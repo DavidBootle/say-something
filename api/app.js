@@ -27,7 +27,6 @@ app.use(express.json());
 app.use(cors());
 
 const port = 5200
-const fs = require('fs/promises')
 const randomstring = require('randomstring')
 
 // initialize socket io
