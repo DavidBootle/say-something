@@ -31,6 +31,16 @@ const port = 5200
 const fs = require('fs/promises')
 const randomstring = require('randomstring')
 
+async function pollIdIsTaken(pollId) {
+    const ref = fbDatabase.ref(db, `polls/${pollId}`) // get database reference to poll
+    const snapshot = await fbDatabase.get(ref) // get the snapshot
+    if (snapshot.exists()) { // determine if the data exists
+        return true
+    } else {
+        return false
+    }
+}
+
 app.get('/', (req, res) => {
     res.send('API ONLINE')
 })
@@ -38,7 +48,13 @@ app.get('/', (req, res) => {
 app.post('/new-poll', async (req, res) => {
     let { adjective, topic } = req.body;
 
-    let pollId = randomstring.generate(8)
+    let pollId = randomstring.generate(4)
+    pollId = pollId.toLowerCase();
+    while (await pollIdIsTaken(pollId)) {
+        let pollId = randomstring.generate(4)
+        pollId = pollId.toLowerCase();
+    }
+
     try {
         await fbDatabase.set(fbDatabase.ref(db, 'polls/' + pollId), {
             adjective,
