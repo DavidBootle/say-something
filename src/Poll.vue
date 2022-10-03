@@ -105,6 +105,9 @@ export default {
 
 <section id="page-container">
     <div v-if="loaded && !error">
+        <a href="/" class="make-your-own-container">
+            <span>Make Your Own Poll</span>
+        </a>
         <say-something-box :adjective="poll.adjective" :topic="poll.topic" :pollId="pollId" @submit="fetchPollData"/>
         <div v-if="opinions && opinions.length > 0">
             <h3>Here's what others said:</h3>
@@ -124,6 +127,33 @@ export default {
 </template>
 
 <style scoped>
+
+.make-your-own-container {
+    background-color: #EEE;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    box-shadow: 0 0 0 0.2rem #AAA;
+    transition: box-shadow 0.2s linear;
+}
+
+.make-your-own-container:hover {
+    box-shadow: 0 0 0 0.3rem #999;
+}
+
+.make-your-own-container span {
+    font-family: sans-serif;
+    color: black;
+    transition: color 0.2s linear, text-decoration 0.2s linear;
+}
+
+.make-your-own-container:hover span {
+    color: darkblue;
+    text-decoration: underline;
+}
 
 #page-container {
     box-sizing: border-box;
