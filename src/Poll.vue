@@ -8,9 +8,9 @@ import { io } from 'socket.io-client'
 
 let socketOptions;
 if (import.meta.env.VITE_BACKEND_URL.includes('/api')) {
-    socketOptions = { path: '/api/socket.io/' }
+    socketOptions = { path: '/api/socket.io/', rejectUnauthorized: false }
 } else {
-    socketOptions = null
+    socketOptions = { rejectUnauthorized: false }
 }
 
 export default {
