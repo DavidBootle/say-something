@@ -125,6 +125,10 @@ export default {
             this.opinions.push(opinion.text.replace(/[\n\r]/g, '<br/>'))
         })
 
+        this.socket.on("connect_error", (err) => {
+            console.log(`connect_error due to ${err.message}`);
+        });
+
     }
 }
 
