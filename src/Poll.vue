@@ -1,5 +1,6 @@
 <script>
 
+// imports
 import SaySomethingBox from './components/SaySomethingBox.vue'
 import LoadingIcon from './components/LoadingIcon.vue'
 import Error from './components/Error.vue'
@@ -27,6 +28,7 @@ export default {
         async fetchPollData() {
             // fetch poll info
             try {
+                // get poll name from database
                 let response = await fetch(this.backendURL + '/fetch-poll', {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -35,15 +37,17 @@ export default {
                     })
                 })
                 if (!response.ok) {
+                    // if something went wrong with the connection, show error page
                     this.loaded = true
                     this.error = true
                     return
                 }
                 let data = await response.json()
                 if (data.success) {
+                    // if poll data was sent successfully, set page values
                     this.poll = data.poll
                 } else if (!data.exists) {
-                    // push error 404 page
+                    // if poll data doesn't exist, push the 404 page
                     this.$router.push({
                         name: "NotFound",
                         params: { pageParams: this.$route.path.substring(1).split('/') },
@@ -51,11 +55,13 @@ export default {
                         hash: this.$route.hash
                     })
                 } else {
+                    // if a server error occurred, show error page
                     this.loaded = true
                     this.error = true
                     return
                 }
 
+                // get list of opinions for the current poll
                 response = await fetch(this.backendURL + '/fetch-opinions', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -65,6 +71,7 @@ export default {
                 })
 
                 if (!response.ok) {
+                    // if there was a problem with the response, show error page
                     this.loaded = true
                     this.error = true
                     return
@@ -72,6 +79,7 @@ export default {
 
                 data = await response.json()
                 if (data.success) {
+                    // if the data was successfully recieved
                     // turn \n into <br/>
                     let opinions = []
                     if (data.opinions) {
@@ -83,24 +91,29 @@ export default {
                     this.loaded = true
                     this.error = false
                 } else if (!data.exists) {
+                    // if the poll exists but there are no opinions in it yet, set an empty list
                     this.opinions = []
                 } else {
+                    // if the response was recieved but there was a server error, show error page
                     this.loaded = true
                     this.error = true
                     return
                 }
             } catch {
+                // if something goes wrong, show error page
                 this.loaded = true;
                 this.error = true;
             }
         }
     },
     mounted() {
+        // when page loads, fetch poll data
         this.fetchPollData()
 
-        // join socket room
+        // send request to join socket room for the given poll
         this.socket.emit('poll-connection', this.pollId)
 
+        // when a new opinion is created, recieve websocket update from server and update opinions list
         this.socket.on('new-opinion', (opinion) => {
             this.opinions.push(opinion.text.replace(/[\n\r]/g, '<br/>'))
         })
