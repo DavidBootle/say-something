@@ -69,7 +69,7 @@ export default {
         <h1 class="page-title">Say Something <strong>{{ adjective }}</strong> About <strong>{{ topic }}</strong></h1>
         <textarea id="opinion-input" v-model="opinionText"></textarea>
         <button id="say-it-button" @click="createOpinion" :disabled="buttonDisabled">Say It!</button>
-        <span id="openQRModal" @click="toggleQRCode" title="Toggle QR Code">
+        <span id="openQRModal" @click="toggleQRCode" title="Toggle QR Code" :class="{ active: showQRCode }">
             <svg height="24" width="24"><path d="M13 21v-2h2v2Zm-2-2v-5h2v5Zm8-3v-4h2v4Zm-2-4v-2h2v2ZM5 14v-2h2v2Zm-2-2v-2h2v2Zm9-7V3h2v2ZM4.5 7.5h3v-3h-3ZM3 9V3h6v6Zm1.5 10.5h3v-3h-3ZM3 21v-6h6v6ZM16.5 7.5h3v-3h-3ZM15 9V3h6v6Zm2 12v-3h-2v-2h4v3h2v2Zm-4-7v-2h4v2Zm-4 0v-2H7v-2h6v2h-2v2Zm1-5V5h2v2h2v2ZM5.25 6.75v-1.5h1.5v1.5Zm0 12v-1.5h1.5v1.5Zm12-12v-1.5h1.5v1.5Z"/></svg>
         </span>
         <div v-if="showQRCode" class="qr-container">
@@ -95,7 +95,7 @@ span#openQRModal svg {
     fill: darkgray;
 }
 
-span#openQRModal:hover svg {
+span#openQRModal:hover svg, span#openQRModal.active svg {
     scale: 1.5;
     fill: black;
 }
