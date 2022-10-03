@@ -11,8 +11,10 @@ export default {
     },
     methods: {
         async createPoll() {
+            // disable submit button
             this.buttonDisabled = true;
             try {
+                // send request to create a new poll
                 let response = await fetch(this.backendURL + '/new-poll', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -21,15 +23,23 @@ export default {
                         topic: this.topic
                     })
                 })
+                if (!response.ok) {
+                    // if something went wrong with the response
+                    alert("Something went wrong.")
+                }
                 let body = await response.json()
                 if (body.success) {
+                    // if the poll was created successfully, redirect to the poll
                     this.$router.push(`/poll/${body.pollId}`)
                 } else {
+                    // if there was a server error
                     alert("Poll failed to create.")
                 }
             } catch {
+                // if something went wrong with the code
                 alert("Something went wrong.")
             } finally {
+                // reenable the submit button after the code has been run
                 this.buttonDisabled=false;
             }
         }
