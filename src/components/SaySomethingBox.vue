@@ -31,8 +31,8 @@ export default {
                 }
                 let data = await response.json();
                 if (data.success) {
-                    alert("Opinion created!");
                     this.opinionText = '';
+                    this.$emit('submit');
                 } else {
                     alert("Something went wrong.");
                 }

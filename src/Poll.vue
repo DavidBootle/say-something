@@ -96,7 +96,7 @@ export default {
 
 <section id="page-container">
     <div v-if="loaded">
-        <say-something-box :adjective="poll.adjective" :topic="poll.topic" :pollId="pollId"/>
+        <say-something-box :adjective="poll.adjective" :topic="poll.topic" :pollId="pollId" @submit="fetchPollData"/>
         <div v-if="opinions">
             <div v-for="opinion in opinions">
                 <p v-html="opinion"></p>
