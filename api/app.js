@@ -32,7 +32,10 @@ const randomstring = require('randomstring')
 // initialize socket io
 const socket = require('socket.io')
 const io = new socket.Server(server, {
-    transports: ["websocket", "polling"]
+    transports: ["websocket", "polling"],
+    cors: {
+        origin: "https://say.bootletools.com"
+    }
 })
 
 // print information about connection errors
