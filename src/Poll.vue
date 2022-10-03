@@ -124,7 +124,7 @@ export default {
         // if socket fails to connect
         this.socket.on("connect_error", (err) => {
             console.log(`connect_error due to ${err.message}`);
-            socket.io.opts.transports = ["polling", "websocket"];
+            this.socket.io.opts.transports = ["polling", "websocket"];
         });
 
     }
