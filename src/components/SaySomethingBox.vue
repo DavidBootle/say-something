@@ -140,6 +140,7 @@ button#say-it-button {
     border-radius: 0.2rem;
     font-size: 15px;
     font-weight: bold;
+    color: black;
 
     transition: box-shadow 0.1s linear;
 }
