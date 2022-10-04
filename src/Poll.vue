@@ -4,6 +4,7 @@
 import SaySomethingBox from './components/SaySomethingBox.vue'
 import LoadingIcon from './components/LoadingIcon.vue'
 import Error from './components/Error.vue'
+import ErrorAlert from './components/ErrorAlert.vue'
 import { io } from 'socket.io-client'
 
 export default {
@@ -11,6 +12,7 @@ export default {
         'say-something-box': SaySomethingBox,
         'loading-icon': LoadingIcon,
         'error': Error,
+        'error-alert': ErrorAlert,
     },
     data() {
         return {
@@ -26,6 +28,7 @@ export default {
                 transports: ["websocket", "polling"]
             }),
             deactivated: false,
+            showSocketAlert: false,
         }
     },
     methods: {
@@ -116,6 +119,7 @@ export default {
         this.socket.on('connect', () => {
             console.log('socket connected!');
             this.fetchPollData();
+            this.showSocketAlert = false;
         })
 
         // send request to join socket room for the given poll
@@ -128,7 +132,6 @@ export default {
         })
 
         // if socket fails to connect
-        let failedConnectionAttempts = 0;
         let overrideFetchTriggered = false;
         this.socket.on("connect_error", (err) => {
             console.log(`connect_error due to ${err.message}`);
@@ -136,13 +139,11 @@ export default {
 
             // if socket continues to fail to connect, pull data anyway, forcing the page to load into either an error, or load data
             // also display an alert that realtime updates aren't working
-            if (failedConnectionAttempts > 2) {
-                if (!overrideFetchTriggered) {
-                    this.fetchPollData();
-                    overrideFetchTriggered = true;
-                }
+            if (!overrideFetchTriggered) {
+                this.fetchPollData();
+                overrideFetchTriggered = true;
+                this.showSocketAlert = true;
             }
-            failedConnectionAttempts += 1;
         });
 
     },
@@ -157,6 +158,9 @@ export default {
         <a href="/" class="make-your-own-container">
             <span>Make Your Own Poll</span>
         </a>
+        <error-alert v-if="showSocketAlert" alert-title="Websocket Error!">
+            Automatic updates are disabled. Refresh manually to see changes.
+        </error-alert>
         <say-something-box :adjective="poll.adjective" :topic="poll.topic" :pollId="pollId" @submit="fetchPollData"/>
         <div v-if="opinions && opinions.length > 0">
             <h3>Here's what others said:</h3>
