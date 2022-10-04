@@ -134,6 +134,8 @@ export default {
             console.log(`connect_error due to ${err.message}`);
             this.socket.io.opts.transports = ["polling", "websocket"];
 
+            // if socket continues to fail to connect, pull data anyway, forcing the page to load into either an error, or load data
+            // also display an alert that realtime updates aren't working
             if (failedConnectionAttempts > 2) {
                 if (!overrideFetchTriggered) {
                     this.fetchPollData();
