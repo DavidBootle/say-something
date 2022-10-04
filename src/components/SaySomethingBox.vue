@@ -157,6 +157,10 @@ button:active {
 }
 
 @media screen and (max-width: 1050px) {
+    .page-title {
+        font-size: 1.5rem;
+    }
+
     .topic-box-container textarea {
         padding: 0.5rem 0.2rem;
     }
