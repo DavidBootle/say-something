@@ -78,6 +78,9 @@ export default {
     },
     mounted() {
         this.generateErrorMessage()
+    },
+    created() {
+        document.title = '404'
     }
 }
 
