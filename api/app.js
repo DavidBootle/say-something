@@ -1,10 +1,11 @@
 // Base backend code for Say Something
+require('dotenv').config();
 
 // initialize firebase
 const fb = require('firebase/app')
 const fbDatabase = require('firebase/database')
 const firebaseConfig = {
-    apiKey: "AIzaSyBntLjEyh3NtzhdtoYs_wxxlYWEAkG5q9Y",
+    apiKey: process.env.FIREBASE_API_KEY,
     authDomain: "say-something-90ba7.firebaseapp.com",
     databaseURL: "https://say-something-90ba7-default-rtdb.firebaseio.com",
     projectId: "say-something-90ba7",
@@ -30,7 +31,8 @@ const port = 5200
 const randomstring = require('randomstring')
 
 // initialize socket io
-const socket = require('socket.io')
+const socket = require('socket.io');
+const { processExpression } = require('@vue/compiler-core');
 const io = new socket.Server(server, {
     transports: ["websocket", "polling"],
     cors: {
