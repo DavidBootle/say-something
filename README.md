@@ -1,2 +1,2 @@
 # say-something
-A small web app that lets people share their mind about a subject.
+Create fun polls and get realtime responses! Built to allow for easy peer-to-peer sharing.
