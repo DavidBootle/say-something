@@ -7,6 +7,8 @@ export default {
             topic: '',
             backendURL: import.meta.env.VITE_BACKEND_URL,
             buttonDisabled: false,
+            adjectivePlaceholder: '',
+            topicPlaceholder: ''
         }
     },
     methods: {
@@ -43,6 +45,36 @@ export default {
                 this.buttonDisabled=false;
             }
         }
+    },
+    mounted() {
+        const adjectivePlaceholders = [
+            'Interesting',
+            'Cool',
+            'Intriguing',
+            'Factual',
+            'Fun',
+            'True',
+            'You Like',
+            'You Dislike',
+            'Nice'
+        ]
+        this.adjectivePlaceholder = adjectivePlaceholders[Math.floor(Math.random() * adjectivePlaceholders.length)]
+
+        const topicPlaceholders = [
+            'The United States',
+            'Jeff',
+            'Pretzels',
+            'Old Cars',
+            'Gazebos',
+            'Sports Drinks',
+            "Last Night's Game",
+            'College',
+            'High School',
+            'Star Wars',
+            'Computers',
+            'Society'
+        ]
+        this.topicPlaceholder = topicPlaceholders[Math.floor(Math.random() * topicPlaceholders.length)]
     }
 }
 
@@ -51,9 +83,9 @@ export default {
 <template>
     <div class="input-box">
         <h1>Say Something</h1>
-        <input type="text" v-model="adjective" placeholder="Cool"/>
+        <input type="text" v-model="adjective" :placeholder="adjectivePlaceholder"/>
         <h2>About</h2>
-        <input type="text" v-model="topic" placeholder="Ice Cream"/>
+        <input type="text" v-model="topic" :placeholder="topicPlaceholder"/>
         <button @click="createPoll" :disabled="buttonDisabled">Create Poll</button>
     </div>
 </template>
