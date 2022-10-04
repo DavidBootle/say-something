@@ -94,6 +94,7 @@ export default {
                     }
                     this.loaded = true
                     this.error = false
+                    document.title = `Say Something ${this.poll.adjective} About ${this.poll.topic}`;
                 } else if (!data.exists) {
                     // if the poll exists but there are no opinions in it yet, set an empty list
                     this.opinions = []
@@ -133,6 +134,9 @@ export default {
         });
 
     },
+    created() {
+        document.title = 'Say Something'
+    }
 }
 
 </script>
