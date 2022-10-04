@@ -32,7 +32,7 @@
 	width: 5rem;
 	height: 5rem;
 	margin: 110px auto 0;
-	border:solid 10px lightblue;
+	border:solid 10px #7CC6FE;
 	border-radius: 50%;
 	border-right-color: transparent;
 	border-bottom-color: transparent;

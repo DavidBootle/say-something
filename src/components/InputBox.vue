@@ -134,7 +134,7 @@ export default {
 
 .input-box button {
     margin: 2rem 0 -0.5rem 0;
-    background-color: lightblue;
+    background-color: #7CC6FE;
     padding: 0.4rem 1rem;
     box-shadow: 0 0 0 0.2rem transparent;
     border: none;
