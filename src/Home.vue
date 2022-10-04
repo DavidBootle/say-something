@@ -17,7 +17,9 @@ export default {
 
 <template>
     <section id="home-container">
+        <object data="/logo.svg" id="logo-svg"></object>
         <input-box/>
+        <p class="credit-text">© 2022 David Bootle</p>
     </section>
 </template>
 
@@ -38,5 +40,17 @@ section#home-container > .padding {
 section#home-container > .column {
     display: flex;
     flex-direction: column;
+}
+
+#logo-svg {
+    height: 7rem;
+    width: 7rem;
+    margin-bottom: 1rem;
+}
+
+.credit-text {
+    font-family: sans-serif;
+    font-size: 1rem;
+    color: gray;
 }
 </style>
