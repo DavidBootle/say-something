@@ -11,9 +11,6 @@ export default {
         return {
             tempLinkText: ''
         }
-    },
-    created() {
-        document.title = 'Say Something'
     }
 }
 </script>

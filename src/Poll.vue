@@ -134,9 +134,6 @@ export default {
         });
 
     },
-    created() {
-        document.title = 'Say Something'
-    }
 }
 
 </script>
