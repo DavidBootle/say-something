@@ -19,7 +19,7 @@ export default {
             poll: null,
             loaded: false,
             error: false,
-            errorMessage: 'The page failed to load.',
+            errorMessage: 'The page failed to load. Try again later.',
             opinions: [],
             socket: io(import.meta.env.VITE_SOCKET_URL, {
                 path: import.meta.env.VITE_SOCKET_PATH,
@@ -128,9 +128,19 @@ export default {
         })
 
         // if socket fails to connect
+        let failedConnectionAttempts = 0;
+        let overrideFetchTriggered = false;
         this.socket.on("connect_error", (err) => {
             console.log(`connect_error due to ${err.message}`);
             this.socket.io.opts.transports = ["polling", "websocket"];
+
+            if (failedConnectionAttempts > 2) {
+                if (!overrideFetchTriggered) {
+                    this.fetchPollData();
+                    overrideFetchTriggered = true;
+                }
+            }
+            failedConnectionAttempts += 1;
         });
 
     },
