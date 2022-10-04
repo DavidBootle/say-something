@@ -24,7 +24,8 @@ export default {
             socket: io(import.meta.env.VITE_SOCKET_URL, {
                 path: import.meta.env.VITE_SOCKET_PATH,
                 transports: ["websocket", "polling"]
-            })
+            }),
+            deactivated: false,
         }
     },
     methods: {
@@ -110,8 +111,11 @@ export default {
         }
     },
     mounted() {
-        // when page loads, fetch poll data
-        this.fetchPollData()
+
+        this.socket.on('connect', () => {
+            console.log('socket connected!');
+            this.fetchPollData();
+        })
 
         // send request to join socket room for the given poll
         this.socket.emit('poll-connection', this.pollId)
@@ -119,6 +123,7 @@ export default {
         // when a new opinion is created, recieve websocket update from server and update opinions list
         this.socket.on('new-opinion', (opinion) => {
             this.opinions.push(opinion.text.replace(/[\n\r]/g, '<br/>'))
+            console.log('New opinion recieved')
         })
 
         // if socket fails to connect
@@ -127,7 +132,7 @@ export default {
             this.socket.io.opts.transports = ["polling", "websocket"];
         });
 
-    }
+    },
 }
 
 </script>
