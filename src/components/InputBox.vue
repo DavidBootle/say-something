@@ -42,7 +42,7 @@ export default {
                 let body = await response.json()
                 if (body.success) {
                     // if the poll was created successfully, redirect to the poll
-                    this.$router.push(`/poll/${body.pollId}`)
+                    this.$router.push(`/${body.pollId}`)
                 } else {
                     // if there was a server error
                     alert("Poll failed to create.")
