@@ -29,6 +29,44 @@ app.use(cors());
 const port = 5200
 const randomstring = require('randomstring')
 
+// setup database cleanup task
+// all polls should be checked every day at midnight, and deleted if they are over 30 days old
+const schedule = require('node-schedule')
+schedule.scheduleJob('0 0 * * *', async () => {
+    try {
+        // get all poll data from the database
+        let pollsRef = fbDatabase.ref(db, `polls`);
+        let pollsSnapshot = await fbDatabase.get(pollsRef);
+        if (!pollsSnapshot.exists()) {
+            // if there are no polls, stop
+            return;
+        }
+        let polls = pollsSnapshot.val();
+
+        // get a list of all pollIds belonging to polls created more than 30 days ago
+        let pollIdsToBeRemoved = []
+        currentDate = Date.now();
+        for (poll of Object.entries(polls)) {
+            let pollId = poll[0];
+            let pollData = poll[1];
+
+            let daysOld = (currentDate - pollData.created) / 1000 / 60 / 60 / 24;
+            if (daysOld >= 30) {
+                pollIdsToBeRemoved.push(pollId);
+            }
+        }
+
+        // delete poll and opinion data associated with those pollIds
+        for (pollId of pollIdsToBeRemoved) {
+            fbDatabase.remove(fbDatabase.ref(db, `polls/${pollId}`));
+            fbDatabase.remove(fbDatabase.ref(db, `opinions/${pollId}`));
+        }
+        console.log(`Purged ${pollIdsToBeRemoved.length} old polls.`)
+    } catch {
+        console.log('Something went wrong while purging old polls.')
+    }
+})
+
 // global vars
 let debugTestOpinions = [] // used to load poll id debugTest
 
