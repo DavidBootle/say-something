@@ -16,6 +16,16 @@ export default {
             // disable submit button
             this.buttonDisabled = true;
             try {
+
+                // input handling
+                // if no input was given, use the placeholder values
+                if (this.adjective == '') {
+                    this.adjective = this.adjectivePlaceholder
+                }
+                if (this.topic == '') {
+                    this.topic = this.topicPlaceholder
+                }
+
                 // send request to create a new poll
                 let response = await fetch(this.backendURL + '/new-poll', {
                     method: 'POST',
