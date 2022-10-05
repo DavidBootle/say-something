@@ -7,7 +7,13 @@ export const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: "/", component: Home },
-    { path: "/poll/:id", component: Poll },
+    { path: "/:id", component: Poll },
+    { // redirect old poll url to new poll url
+      path: '/poll/:id',
+      redirect: to => {
+        return { path: `/${to.params.id}`}
+      }
+    },
     { path: '/:pageParams(.*)*', name: 'NotFound', component: Error404 },
   ]
 });
