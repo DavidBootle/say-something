@@ -114,6 +114,14 @@ app.post('/fetch-poll', async (req, res) => {
         return
     }
 
+    // if pollId is serverError, replicate an internal server error
+    if (pollId == 'serverError') {
+        res.status(500).json({
+            "success": false
+        })
+        return
+    }
+
     try {
         // get poll data from the database
         let snapshot = await fbDatabase.get(fbDatabase.child(fbDatabase.ref(db), `polls/${pollId}`))
