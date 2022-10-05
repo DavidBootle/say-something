@@ -103,13 +103,17 @@ span#openQRModal {
 
 span#openQRModal svg {
     scale: 1.2;
-    transition: scale 50ms linear;
+    transition: scale 50ms linear, fill 50ms linear;
     fill: darkgray;
 }
 
-span#openQRModal:hover svg, span#openQRModal.active svg {
-    scale: 1.5;
+span#openQRModal.active svg, span#openQRModal.active:hover svg {
     fill: black;
+}
+
+span#openQRModal:hover svg {
+    scale: 1.5;
+    fill: #444;
 }
 
 .page-title {
