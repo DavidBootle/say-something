@@ -29,8 +29,12 @@ app.use(cors());
 const port = 5200
 const randomstring = require('randomstring')
 
+// global vars
+let debugTestOpinions = [] // used to load poll id debugTest
+
 // initialize socket io
-const socket = require('socket.io')
+const socket = require('socket.io');
+const { debug } = require('console');
 const io = new socket.Server(server, {
     transports: ["websocket", "polling"],
     cors: {
@@ -98,6 +102,18 @@ app.post('/new-poll', async (req, res) => {
 app.post('/fetch-poll', async (req, res) => {
     let { pollId } = req.body;
 
+    // if pollId is debugTest, use test values instead of calling database
+    if (pollId == 'debugTest') {
+        res.json({
+            "success": true,
+            "poll": {
+                "adjective": "Insightful",
+                "topic": "Debugging"
+            }
+        })
+        return
+    }
+
     try {
         // get poll data from the database
         let snapshot = await fbDatabase.get(fbDatabase.child(fbDatabase.ref(db), `polls/${pollId}`))
@@ -136,24 +152,34 @@ app.post('/new-opinion', async (req, res) => {
         created: Date.now()
     }
 
-    try {
-        // access list of opinions in the database
-        let opinionList = fbDatabase.ref(db, 'opinions/' + pollId)
-
-        // create the new opinion
-        let newOpinion = fbDatabase.push(opinionList)
-        await fbDatabase.set(newOpinion, opinion)
-
-        // send response
+    // if pollId is debugTest, add opinion to local memory instead of database
+    if (pollId == 'debugTest') {
+        debugTestOpinions.push(opinion)
         res.json({
             "success": true
         })
     }
-    catch {
-        // if something went wrong, send response
-        res.status(500).json({
-            "success": false
-        })
+    
+    else {
+        try {
+            // access list of opinions in the database
+            let opinionList = fbDatabase.ref(db, 'opinions/' + pollId)
+    
+            // create the new opinion
+            let newOpinion = fbDatabase.push(opinionList)
+            await fbDatabase.set(newOpinion, opinion)
+    
+            // send response
+            res.json({
+                "success": true
+            })
+        }
+        catch {
+            // if something went wrong, send response
+            res.status(500).json({
+                "success": false
+            })
+        }
     }
 
     // update connected clients for realtime updates
@@ -163,6 +189,15 @@ app.post('/new-opinion', async (req, res) => {
 // get a list of opinions belonging to a specific poll from the database
 app.post('/fetch-opinions', async (req, res) => {
     let { pollId } = req.body;
+
+    // if pollId is debugTest use memory opinions list to avoid unnecessary database calls
+    if (pollId == 'debugTest') {
+        res.json({
+            "success": true,
+            "opinions": debugTestOpinions
+        })
+        return
+    }
     
     try {
         // access the list of opinions belonging to the given poll in the database
