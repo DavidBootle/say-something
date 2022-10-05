@@ -11,6 +11,9 @@ export default {
         return {
             tempLinkText: ''
         }
+    },
+    mounted() {
+        document.title = 'Say Something'
     }
 }
 </script>
