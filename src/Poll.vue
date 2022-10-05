@@ -7,6 +7,11 @@ import Error from './components/Error.vue'
 import ErrorAlert from './components/ErrorAlert.vue'
 import { io } from 'socket.io-client'
 
+// use non-functional socket url if pollId is 'socketError'
+function getSocketURL(pollId) {
+    return (pollId == 'socketError') ? 'www.debugthissiteprobablydoesntexist.com' : import.meta.env.VITE_SOCKET_URL
+}
+
 export default {
     components: {
         'say-something-box': SaySomethingBox,
@@ -23,7 +28,7 @@ export default {
             error: false,
             errorMessage: 'The page failed to load. Try again later.',
             opinions: [],
-            socket: io(import.meta.env.VITE_SOCKET_URL, {
+            socket: io(getSocketURL(this.$route.params.id), {
                 path: import.meta.env.VITE_SOCKET_PATH,
                 transports: ["websocket", "polling"]
             }),
@@ -116,6 +121,10 @@ export default {
     },
     mounted() {
 
+        // if pollId is socketError, replicate a socket connection error
+        if (this.pollId == 'socketError') {
+            console.warn('Poll ID is "socketError". A socket connection error will be simulated.')
+        }
         this.socket.on('connect', () => {
             console.log('socket connected!');
             this.fetchPollData();
@@ -145,7 +154,6 @@ export default {
                 this.showSocketAlert = true;
             }
         });
-
     },
 }
 

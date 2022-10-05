@@ -102,8 +102,8 @@ app.post('/new-poll', async (req, res) => {
 app.post('/fetch-poll', async (req, res) => {
     let { pollId } = req.body;
 
-    // if pollId is debugTest, use test values instead of calling database
-    if (pollId == 'debugTest') {
+    // if pollId is debugTest or socketError, use test values instead of calling database
+    if (pollId == 'debugTest' || pollId == 'socketError') {
         res.json({
             "success": true,
             "poll": {
@@ -160,8 +160,8 @@ app.post('/new-opinion', async (req, res) => {
         created: Date.now()
     }
 
-    // if pollId is debugTest, add opinion to local memory instead of database
-    if (pollId == 'debugTest') {
+    // if pollId is debugTest or socketError, add opinion to local memory instead of database
+    if (pollId == 'debugTest' || pollId == 'socketError') {
         debugTestOpinions.push(opinion)
         res.json({
             "success": true
@@ -198,8 +198,8 @@ app.post('/new-opinion', async (req, res) => {
 app.post('/fetch-opinions', async (req, res) => {
     let { pollId } = req.body;
 
-    // if pollId is debugTest use memory opinions list to avoid unnecessary database calls
-    if (pollId == 'debugTest') {
+    // if pollId is debugTest or socketError use memory opinions list to avoid unnecessary database calls
+    if (pollId == 'debugTest' || pollId == 'socketError') {
         res.json({
             "success": true,
             "opinions": debugTestOpinions
