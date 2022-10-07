@@ -46,8 +46,8 @@ section#home-container > .column {
 }
 
 #logo-svg {
-    height: 7rem;
-    width: 7rem;
+    height: 6rem;
+    width: 6rem;
     margin-bottom: 1rem;
 }
 
