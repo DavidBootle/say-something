@@ -7,5 +7,5 @@ services:
       dockerfile: Dockerfile
     image: davidbootle/saysomething
     ports:
-      - "5173:5173"
-    command: ["static-server", "-p", "5173"]
+      - "4173:4173"
+    command: ["static-server", "-p", "4173"]
