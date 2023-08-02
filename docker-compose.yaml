@@ -9,3 +9,12 @@ services:
     ports:
       - "4173:4173"
     command: ["static-server", "-p", "4173"]
+  saysomethingbackend:
+    container_name: SaySomethingBackend
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    image: davidbootle/saysomethingbackend
+    ports:
+      - "5200:5200"
+    command: ["npm", "run", "dev"]
