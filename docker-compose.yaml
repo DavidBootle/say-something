@@ -1,0 +1,11 @@
+version: "3"
+services:
+  bootletoolshome:
+    container_name: SaySomething
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: davidbootle/saysomething
+    ports:
+      - "5173:5173"
+    command: ["static-server", "-p", "5173"]
