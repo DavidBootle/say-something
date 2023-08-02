@@ -9,7 +9,7 @@ jobs:
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ssh.bootle.tech
-          username: bootletoolshome
+          username: saysomething
           password: ${{ secrets.SAYSOMETHINGPASSWORD }}
           port: 22
           script: update
