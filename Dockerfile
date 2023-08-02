@@ -12,9 +12,6 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm ci
 
-# install static-server
-RUN npm install -g static-server
-
 # Expose app port
 EXPOSE 4173
 
@@ -24,8 +21,5 @@ COPY . .
 # Build app
 RUN npm run build
 
-# move to the dist folder
-WORKDIR /usr/src/app/dist
-
 # Start server
-CMD ["static-server", "-p", "4173"]
+CMD ["npm", "run", "preview"]
