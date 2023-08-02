@@ -16,7 +16,7 @@ RUN npm ci
 RUN npm install -g static-server
 
 # Expose app port
-EXPOSE 5173
+EXPOSE 4173
 
 # Copy app source code into container
 COPY . .
@@ -28,4 +28,4 @@ RUN npm run build
 WORKDIR /usr/src/app/dist
 
 # Start server
-CMD ["static-server", "-p", "5173"]
+CMD ["static-server", "-p", "4173"]
