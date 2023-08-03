@@ -1,4 +1,5 @@
 version: "3"
+name: saysomething
 services:
   saysomething:
     container_name: SaySomething
